@@ -1,13 +1,14 @@
 ﻿using EncurtadorURL.API.Backend.Interfaces.IBusiness;
 using EncurtadorURL.API.Backend.Interfaces.IDataAccess;
 using EncurtadorURL.API.Backend.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace EncurtadorURL.API.Backend.Business
 {
     public class UrlEncurtadaBusiness : IUrlEncurtadaBusiness
     {
-        private const string API_URL = "https://localhost:7234/api/";
+        //private const string API_URL = "https://localhost:7234/api/";
 
         private readonly IUrlEncurtadaDataAccess DataAccess;
         public UrlEncurtadaBusiness(IUrlEncurtadaDataAccess _da)
@@ -74,6 +75,26 @@ namespace EncurtadorURL.API.Backend.Business
                 throw new ApplicationException("IdShort URL para busca não informada.");
 
             return this.DataAccess.ReadBy_IdShortUrl(idShortUrl);
+        }
+        public List<UrlEncurtadas> ObterTop5FromUrlsJson()
+        {
+            string content = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}/urls.json");
+            var listaUrls = JsonConvert.DeserializeObject<IEnumerable<UrlEncurtadas>>(content);
+            int quantidadeRegistros = 5;
+
+            if (listaUrls == null)
+                throw new ApplicationException("Não foi possível efetuar a leitura do arquivo urls.json.");
+
+            List<UrlEncurtadas> result = new List<UrlEncurtadas>();
+            listaUrls.OrderByDescending(x => x.Hits).ToList().ForEach(x =>
+            {
+                if (result.Count >= quantidadeRegistros)
+                    return;
+
+                result.Add(x);
+            });
+
+            return result;
         }
 
 

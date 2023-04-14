@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace EncurtadorURL.API.Backend.Models
+﻿namespace EncurtadorURL.API.Backend.Models
 {
     public class UrlEncurtadas
     {

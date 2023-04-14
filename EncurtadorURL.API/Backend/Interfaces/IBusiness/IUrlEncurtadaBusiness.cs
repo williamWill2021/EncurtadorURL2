@@ -12,5 +12,6 @@ namespace EncurtadorURL.API.Backend.Interfaces.IBusiness
         UrlEncurtadas? ReadBy_Url(string url);
         UrlEncurtadas? ReadBy_ShortUrl(string shortUrl);
         Task<UrlEncurtadas?> ReadBy_IdShortUrl(string idShortUrl);
+        List<UrlEncurtadas> ObterTop5FromUrlsJson();
     }
 }

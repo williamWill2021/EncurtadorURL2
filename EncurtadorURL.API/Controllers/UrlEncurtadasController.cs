@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using EncurtadorURL.API.Backend.Models;
-using EncurtadorURL.API.Backend.DataAccess.Context;
 using EncurtadorURL.API.Backend.Interfaces.IBusiness;
-using EncurtadorURL.API.Backend.Interfaces.IDataAccess;
-using EncurtadorURL.API.Backend.Business;
+using System.Collections.Generic;
 
 namespace EncurtadorURL.API.Controllers
 {
@@ -36,6 +33,24 @@ namespace EncurtadorURL.API.Controllers
             await this.UrlEncurtadaBusiness.Update(urlEncurtadas);
 
             return Redirect(urlEncurtadas.Url);
+        }
+
+        // GET: UrlEncurtadas/Top5FromJson
+        [HttpGet("Top5FromJson")]
+        public ActionResult<List<UrlEncurtadas>> Top5FromJson()
+        {
+            List<UrlEncurtadas> result = null;
+
+            try
+            {
+                result = this.UrlEncurtadaBusiness.ObterTop5FromUrlsJson();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
 
         // POST: UrlEncurtadas/EncurtarUrl
